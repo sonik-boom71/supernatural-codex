@@ -1,11 +1,4 @@
 import type { Metadata } from 'next';
-import {
-  Bebas_Neue,
-  Oswald,
-  Playfair_Display,
-  Inter,
-  JetBrains_Mono,
-} from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { Navbar } from '@/components/layout/Navbar';
@@ -13,34 +6,6 @@ import { Footer } from '@/components/layout/Footer';
 import { FogOverlay } from '@/components/effects/FogOverlay';
 import { CarryOnEasterEgg } from '@/components/effects/CarryOnEasterEgg';
 import { RandomQuoteWidget } from '@/components/quotes/RandomQuoteWidget';
-
-const bebas = Bebas_Neue({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-bebas',
-  display: 'swap',
-});
-const oswald = Oswald({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-oswald',
-  display: 'swap',
-});
-const playfair = Playfair_Display({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-playfair',
-  display: 'swap',
-  style: ['normal', 'italic'],
-});
-const inter = Inter({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-const mono = JetBrains_Mono({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-mono',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://hunters-codex.vercel.app'),
@@ -68,10 +33,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="ru"
-      className={`${bebas.variable} ${oswald.variable} ${playfair.variable} ${inter.variable} ${mono.variable}`}
-    >
+    <html lang="ru">
+      <head>
+        {/* Шрифты грузятся браузером, а не на этапе сборки —
+            так Vercel-сборка не зависит от доступности fonts.gstatic.com. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font -- ссылка в корневом layout грузится для всех страниц */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300..700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-screen">
         <ThemeProvider>
           <FogOverlay />

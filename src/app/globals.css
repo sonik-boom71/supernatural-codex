@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 :root {
+  /* Шрифты подключаются через <link> в layout.tsx (см. <head>),
+     чтобы сборка не зависела от загрузки с fonts.gstatic.com. */
+  --font-bebas: 'Bebas Neue', Impact, sans-serif;
+  --font-oswald: 'Oswald', Impact, sans-serif;
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
   --bg-void: #0a0a0a;
   --bg-night: #121212;
   --bg-asphalt: #1a1a1a;
