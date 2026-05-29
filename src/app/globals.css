@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-void: #0a0a0a;
+  --bg-night: #121212;
+  --bg-asphalt: #1a1a1a;
+  --bg-mortar: #242424;
+  --bg-paper: #2c2c2c;
+  --text-primary: #f5f1e8;
+  --text-secondary: #b8ad96;
+  --text-muted: #6b6358;
+  --accent-impala: #d4af37;
+  --accent-blood: #8b0000;
+  --accent-flame: #ff6b1a;
+  --accent-grace: #4fa8ff;
+  --border-faded: rgba(212, 175, 55, 0.18);
+}
+
+/* Сверхтёмная тема «Кромешная тьма» */
+.pitch-black {
+  --bg-void: #000000;
+  --bg-night: #050505;
+  --bg-asphalt: #0c0c0c;
+  --text-primary: #e8e0c8;
+}
+
+@layer base {
+  * {
+    @apply border-rust/30;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-void);
+    color: var(--text-primary);
+    @apply font-body antialiased;
+    background-image:
+      radial-gradient(circle at 50% -10%, rgba(212, 175, 55, 0.06), transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(139, 0, 0, 0.05), transparent 45%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2 {
+    @apply font-display tracking-wide;
+  }
+
+  h3,
+  h4 {
+    @apply font-title;
+  }
+
+  ::selection {
+    background: var(--accent-impala);
+    color: #0a0a0a;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-title {
+    @apply font-display text-4xl uppercase tracking-wider text-bone sm:text-5xl;
+  }
+
+  .section-eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.35em] text-impala/80;
+  }
+
+  /* Карточка «старой бумаги» */
+  .card-paper {
+    background-color: var(--bg-asphalt);
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.04) 0px,
+        rgba(0, 0, 0, 0.04) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    @apply rounded-sm border border-impala/15 transition-all duration-300;
+  }
+
+  .card-paper:hover {
+    @apply border-impala/40 shadow-glow;
+  }
+
+  /* Кнопка с золотой обводкой и огненным заполнением */
+  .btn-ember {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden
+      rounded-sm border border-impala/60 px-6 py-3 font-display uppercase
+      tracking-widest text-impala transition-colors duration-300;
+  }
+
+  .btn-ember::before {
+    content: '';
+    @apply absolute inset-0 -z-10 origin-bottom scale-y-0 bg-gradient-to-t
+      from-flame via-blood to-transparent transition-transform duration-300;
+  }
+
+  .btn-ember:hover {
+    @apply text-bone;
+  }
+
+  .btn-ember:hover::before {
+    @apply scale-y-100;
+  }
+
+  .link-spark {
+    @apply relative text-parchment transition-colors duration-200 hover:text-impala;
+  }
+
+  .link-spark::after {
+    content: '';
+    @apply absolute -bottom-1 left-1/2 h-px w-0 -translate-x-1/2 bg-impala
+      transition-all duration-300;
+  }
+
+  .link-spark:hover::after {
+    @apply w-full;
+  }
+
+  .tag-chip {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono
+      text-[10px] uppercase tracking-wider;
+  }
+}
+
+/* Кастомный скроллбар */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent-impala), var(--accent-blood));
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-flame);
+}
+
+/* Фокус-видимость */
+:focus-visible {
+  outline: 2px solid var(--accent-impala);
+  outline-offset: 2px;
+}
+
+/* Дорожная разметка для hero */
+.road-line {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--accent-impala) 0,
+    var(--accent-impala) 40px,
+    transparent 40px,
+    transparent 90px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
