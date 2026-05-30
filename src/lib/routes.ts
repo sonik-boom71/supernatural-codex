@@ -15,6 +15,7 @@ export const routes = {
   guessEpisode: '/interactive/guess-episode',
   tracker: '/interactive/tracker',
   submitStory: '/interactive/submit-story',
+  fbiBadge: '/interactive/fbi-badge',
   community: '/community',
   forum: '/forum',
   thread: (id: string) => `/forum/${id}`,

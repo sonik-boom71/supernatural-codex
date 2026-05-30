@@ -10,6 +10,12 @@ export const metadata: Metadata = {
 
 const cards = [
   {
+    href: routes.fbiBadge,
+    icon: '🪪',
+    title: 'Удостоверение охотника',
+    desc: 'Сделай себе корочку ФБР как у Винчестеров: имя, фото — скачай и поделись.',
+  },
+  {
     href: routes.quiz,
     icon: '🧭',
     title: 'Кто ты из охотников?',
