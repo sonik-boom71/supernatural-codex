@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Quote as QuoteIcon } from 'lucide-react';
 import { characters, getCharacter, factions } from '@/data/characters';
 import { episodes } from '@/data/episodes';
 import { routes } from '@/lib/routes';
 import { formatEpisodeCode } from '@/lib/utils';
+import { actorPhoto } from '@/lib/images';
 
 export function generateStaticParams() {
   return characters.map((c) => ({ slug: c.slug }));
@@ -26,6 +28,7 @@ export default function CharacterPage({ params }: { params: { slug: string } }) 
   const appearances = episodes
     .filter((e) => e.characters.includes(character.slug))
     .sort((a, b) => a.season - b.season || a.number - b.number);
+  const photo = actorPhoto(character.actorEn);
   const initials = character.name
     .split(' ')
     .map((w) => w[0])
@@ -45,17 +48,28 @@ export default function CharacterPage({ params }: { params: { slug: string } }) 
         {/* Портрет */}
         <div>
           <div
-            className="card-paper flex aspect-[3/4] items-center justify-center overflow-hidden"
+            className="card-paper relative flex aspect-[3/4] items-center justify-center overflow-hidden"
             style={{
               background: `radial-gradient(circle at 50% 30%, ${accent}33, #0d0d0d 70%)`,
             }}
           >
-            <span
-              className="font-brand text-8xl tracking-widest opacity-40"
-              style={{ color: accent }}
-            >
-              {initials}
-            </span>
+            {photo ? (
+              <Image
+                src={photo}
+                alt={character.nameRu}
+                fill
+                sizes="320px"
+                className="object-cover object-top"
+                priority
+              />
+            ) : (
+              <span
+                className="font-brand text-8xl tracking-widest opacity-40"
+                style={{ color: accent }}
+              >
+                {initials}
+              </span>
+            )}
           </div>
           <dl className="mt-5 space-y-3 text-sm">
             <Row label="Лагерь" value={faction?.label ?? ''} accent={faction?.color} />

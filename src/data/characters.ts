@@ -1,6 +1,6 @@
 import type { Character } from '@/types';
 
-export const characters: Character[] = [
+const baseCharacters: Character[] = [
   {
     slug: 'dean',
     name: 'Dean Winchester',
@@ -422,6 +422,43 @@ export const characters: Character[] = [
     accent: '#7a7a8a',
   },
 ];
+
+// Англ. имена актёров — для подбора фото из TMDB (см. src/lib/images.ts).
+const actorEnBySlug: Record<string, string> = {
+  dean: 'Jensen Ackles',
+  sam: 'Jared Padalecki',
+  castiel: 'Misha Collins',
+  crowley: 'Mark Sheppard',
+  jack: 'Alexander Calvert',
+  chuck: 'Rob Benedict',
+  mary: 'Samantha Smith',
+  john: 'Jeffrey Dean Morgan',
+  bobby: 'Jim Beaver',
+  gabriel: 'Richard Speight Jr.',
+  lucifer: 'Mark Pellegrino',
+  michael: 'Jake Abel',
+  amara: 'Emily Swallow',
+  azazel: 'Fredric Lehne',
+  lilith: 'Rachel Miner',
+  ruby: 'Genevieve Padalecki',
+  bela: 'Lauren Cohan',
+  gordon: 'Sterling K. Brown',
+  kevin: 'Osric Chau',
+  jo: 'Alona Tal',
+  ellen: 'Samantha Ferris',
+  ash: 'Chad Lindberg',
+  meg: 'Rachel Miner',
+  jody: 'Kim Rhodes',
+  charlie: 'Felicia Day',
+  rowena: 'Ruth Connell',
+  abaddon: 'Alaina Huffman',
+  metatron: 'Curtis Armstrong',
+};
+
+export const characters: Character[] = baseCharacters.map((c) => ({
+  ...c,
+  actorEn: actorEnBySlug[c.slug] ?? c.actorEn,
+}));
 
 export const getCharacter = (slug: string) =>
   characters.find((c) => c.slug === slug);

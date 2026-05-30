@@ -1,7 +1,9 @@
-import type { Episode } from '@/types';
+import type { Episode, TmdbEpisode } from '@/types';
+import tmdbEpisodesRaw from './generated/tmdb-episodes.json';
 
-// Полный Сезон 1 + знаковые серии остальных сезонов.
-export const episodes: Episode[] = [
+// Курируемый набор: даёт богатые русские описания + связи с монстрами,
+// персонажами, тегами и локациями (полный S1 + знаковые серии).
+const curatedEpisodes: Episode[] = [
   // ─────────────────── СЕЗОН 1 ───────────────────
   {
     id: 's01e01',
@@ -544,6 +546,44 @@ export const episodes: Episode[] = [
     locationSlug: 'lebanon',
   },
 ];
+
+// Все 327 серий из TMDB (src/data/generated/tmdb-episodes.json).
+// До запуска `npm run tmdb` массив пуст — тогда работает курируемый набор.
+const tmdbEpisodes = tmdbEpisodesRaw as unknown as TmdbEpisode[];
+
+const curatedById = new Map(curatedEpisodes.map((e) => [e.id, e]));
+
+// Слияние: база — TMDB (все серии, рейтинги, кадры),
+// поверх — курируемые описания и связи (монстры/персонажи/теги/локация).
+const merged: Episode[] = tmdbEpisodes.map((t) => {
+  const c = curatedById.get(t.id);
+  return {
+    id: t.id,
+    season: t.season,
+    number: t.number,
+    title: t.title,
+    titleRu: c?.titleRu || t.titleRu,
+    airDate: t.airDate,
+    rating: c?.rating || t.rating || 0,
+    summary: c?.summary || t.summary || 'Описание серии появится позже.',
+    monsters: c?.monsters ?? [],
+    characters: c?.characters ?? [],
+    tags: c?.tags ?? [],
+    locationSlug: c?.locationSlug,
+    stillPath: t.stillPath ?? null,
+  };
+});
+
+// Серии из курируемого набора, которых ещё нет в TMDB-выгрузке
+// (актуально, пока скрипт не запущен — тогда в TMDB пусто).
+const mergedIds = new Set(merged.map((e) => e.id));
+for (const c of curatedEpisodes) {
+  if (!mergedIds.has(c.id)) merged.push(c);
+}
+
+export const episodes: Episode[] = merged.sort(
+  (a, b) => a.season - b.season || a.number - b.number,
+);
 
 export const getEpisode = (id: string) =>
   episodes.find((e) => e.id.toLowerCase() === id.toLowerCase());

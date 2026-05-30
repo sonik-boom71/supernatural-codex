@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Star, ArrowLeft, Calendar } from 'lucide-react';
 import { episodes, getEpisode } from '@/data/episodes';
+import { tmdbImage } from '@/lib/images';
 import { getCharacter } from '@/data/characters';
 import { getMonster } from '@/data/bestiary';
 import { getLocation } from '@/data/locations';
@@ -32,6 +34,7 @@ export default function EpisodePage({ params }: { params: { id: string } }) {
   const monsters = ep.monsters.map(getMonster).filter(Boolean);
   const chars = ep.characters.map(getCharacter).filter(Boolean);
   const location = ep.locationSlug ? getLocation(ep.locationSlug) : undefined;
+  const still = tmdbImage(ep.stillPath, 'w780');
 
   return (
     <article className="container-page py-12">
@@ -72,6 +75,20 @@ export default function EpisodePage({ params }: { params: { id: string } }) {
           </div>
         )}
       </header>
+
+      {still && (
+        <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-sm border border-impala/20">
+          <Image
+            src={still}
+            alt={ep.titleRu}
+            fill
+            sizes="(max-width: 1024px) 100vw, 1024px"
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-void/60 via-transparent to-transparent" />
+        </div>
+      )}
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[2fr,1fr]">
         <div>

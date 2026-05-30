@@ -58,6 +58,20 @@ export interface Episode {
   characters: string[]; // slugs
   tags: EpisodeTag[];
   locationSlug?: string;
+  stillPath?: string | null; // путь TMDB к кадру серии
+}
+
+// Сырой эпизод из TMDB (src/data/generated/tmdb-episodes.json)
+export interface TmdbEpisode {
+  id: string;
+  season: number;
+  number: number;
+  title: string;
+  titleRu: string;
+  airDate: string;
+  rating: number;
+  summary: string;
+  stillPath: string | null;
 }
 
 export interface Character {
@@ -71,6 +85,7 @@ export interface Character {
   firstSeen: string;
   lastSeen?: string;
   actor: string;
+  actorEn?: string; // англ. имя актёра — для подбора фото из TMDB
   quote?: string;
   accent?: string;
 }
