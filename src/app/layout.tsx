@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { AuthProvider } from '@/providers/AuthProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -50,14 +51,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen">
-        <ThemeProvider>
-          <FogOverlay />
-          <Navbar />
-          <main className="pt-16">{children}</main>
-          <Footer />
-          <RandomQuoteWidget />
-          <CarryOnEasterEgg />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <FogOverlay />
+            <Navbar />
+            <main className="pt-16">{children}</main>
+            <Footer />
+            <RandomQuoteWidget />
+            <CarryOnEasterEgg />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

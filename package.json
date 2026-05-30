@@ -5,21 +5,28 @@
   "description": "HUNTER'S CODEX — фан-энциклопедия по сериалу «Сверхъестественное» (Supernatural)",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "tmdb": "node scripts/fetch-tmdb.mjs"
+    "tmdb": "node scripts/fetch-tmdb.mjs",
+    "postinstall": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.8",
     "lucide-react": "^0.408.0",
     "next": "^14.2.35",
+    "next-auth": "^4.24.14",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -27,6 +34,7 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.35",
     "postcss": "^8.4.39",
+    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.6",
     "typescript": "^5.5.3"
   }

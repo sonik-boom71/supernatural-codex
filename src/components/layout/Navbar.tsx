@@ -7,6 +7,7 @@ import { Moon as MoonIcon, Menu as MenuIcon, X as XIcon } from 'lucide-react';
 import { mainNav, routes } from '@/lib/routes';
 import { useTheme } from '@/providers/ThemeProvider';
 import { Pentagram } from '@/components/icons/Pentagram';
+import { AccountButton } from '@/components/auth/AccountButton';
 import { cn } from '@/lib/utils';
 
 export function Navbar() {
@@ -75,6 +76,7 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
+          <AccountButton />
           <button
             type="button"
             onClick={toggleTheme}

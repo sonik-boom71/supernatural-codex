@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { WeeklyPoll } from '@/components/community/WeeklyPoll';
 import { MessageSquare, BookOpen, Image as ImageIcon, Heart } from 'lucide-react';
+import { routes } from '@/lib/routes';
 
 export const metadata: Metadata = {
   title: 'Комьюнити',
@@ -36,9 +38,17 @@ export default function CommunityPage() {
           <div className="space-y-12">
             {/* Форум */}
             <section>
-              <h2 className="mb-5 flex items-center gap-2 font-title text-2xl text-bone">
-                <MessageSquare className="h-6 w-6 text-impala" /> Форум
-              </h2>
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <h2 className="flex items-center gap-2 font-title text-2xl text-bone">
+                  <MessageSquare className="h-6 w-6 text-impala" /> Форум
+                </h2>
+                <Link
+                  href={routes.forum}
+                  className="shrink-0 rounded-sm border border-impala/40 px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest text-impala transition-colors hover:bg-impala/10"
+                >
+                  Открыть форум →
+                </Link>
+              </div>
               <ul className="divide-y divide-impala/10 overflow-hidden rounded-sm border border-impala/15">
                 {threads.map((t) => (
                   <li

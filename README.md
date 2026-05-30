@@ -17,7 +17,9 @@
 - **Цитаты** — генератор случайной цитаты + фильтр по персонажу + копирование
 - **Саундтрек** — плейлист Импалы со встроенным YouTube-плеером, фильтр по сезонам
 - **Интерактив** — тест «Кто ты из охотников?», квиз «Угадай серию», трекер просмотра, форма страшилок
-- **Комьюнити** — прототип форума, фанфиков, фан-арта и рабочий опрос недели
+- **Комьюнити** — витрина фанфиков/фан-арта, опрос недели + **рабочий форум**
+  (`/forum`) на Postgres с регистрацией, входом, темами и ответами
+- **TMDB** — все **327 серий**, рейтинги, кадры, постеры сезонов и фото актёров
 - **Новости / Пасхалки / О проекте**
 - **Режим «Ночная охота»** (кромешная тьма), кастомный скроллбар, пасхалки (7 кликов по логотипу)
 
@@ -29,11 +31,13 @@
 | Стили | Tailwind CSS, CSS-переменные дизайн-токенов |
 | Анимации | Framer Motion, CSS keyframes, SVG `feTurbulence` |
 | Иконки | lucide-react + кастомные SVG (пентаграмма, дьявольская ловушка) |
-| Данные | Статические TS-модули в `src/data` |
+| Данные | Статические TS-модули в `src/data` + выгрузка TMDB |
+| Изображения | TMDB API (постеры/кадры/фото), `next/image` |
 | Состояние пользователя | localStorage (трекер, опросы, истории, тема) |
-| Опциональный бэкенд | Prisma + PostgreSQL (см. `prisma/schema.prisma`) |
+| Бэкенд (форум) | Prisma + PostgreSQL (Neon) + NextAuth (Credentials) |
 
-Сайт полностью статический (SSG) и работает **без базы данных**.
+Базовый сайт статичен (SSG) и работает **без базы**. Форум — динамический
+раздел; включается, когда заданы переменные окружения БД/авторизации.
 
 ## 🚀 Запуск
 
@@ -46,6 +50,53 @@ npm run start    # запуск собранной версии
 
 Требуется Node.js 18.18+ (рекомендуется 20+).
 
+## 🎬 Данные TMDB (все 327 серий + изображения)
+
+Серии, рейтинги, кадры, постеры сезонов и фото актёров берутся из
+[TMDB](https://www.themoviedb.org/) (шоу `Supernatural`, ID 1622).
+
+1. Получи бесплатный API-ключ: **themoviedb.org → Settings → API**.
+2. Запусти выгрузку:
+
+```bash
+# Windows PowerShell
+$env:TMDB_API_KEY="твой_ключ"; npm run tmdb
+# macOS/Linux
+TMDB_API_KEY=твой_ключ npm run tmdb
+```
+
+Скрипт запишет `src/data/generated/*.json` (327 серий + изображения).
+Закоммить эти файлы — на Vercel ключ при сборке **не нужен**, картинки отдаёт
+CDN `image.tmdb.org`. До запуска сайт показывает курируемый набор серий.
+
+## 🗄️ Бэкенд форума (Neon Postgres)
+
+Форум `/forum` работает на Prisma + Postgres + NextAuth. Бесплатно через Neon:
+
+1. Создай проект на [neon.tech](https://neon.tech), скопируй два URL:
+   *pooled* (для приложения) и *direct* (для миграций).
+2. Заполни `.env` (см. `.env.example`):
+
+```env
+DATABASE_URL="postgresql://...pooler...?sslmode=require"
+DIRECT_URL="postgresql://...direct...?sslmode=require"
+NEXTAUTH_SECRET="$(openssl rand -base64 32)"
+NEXTAUTH_URL="http://localhost:3000"   # на проде — адрес сайта
+```
+
+3. Применить схему и запустить:
+
+```bash
+npm run db:push     # создаёт таблицы в Neon
+npm run dev
+```
+
+4. На **Vercel** добавь те же переменные в *Settings → Environment Variables*
+   (`NEXTAUTH_URL` = адрес деплоя) и сделай Redeploy. Форум оживёт.
+
+Без этих переменных сайт собирается и работает, а `/forum` показывает
+инструкцию по подключению.
+
 ## 📁 Структура
 
 ```
@@ -57,10 +108,12 @@ src/
 ├── data/                # контент: seasons, episodes, characters, bestiary,
 │                        #   weapons, quotes, soundtrack, locations, news,
 │                        #   easter-eggs, quiz
-├── lib/                 # утилиты, маршруты, бейджи
-├── providers/           # ThemeProvider (тема «Ночная охота»)
+│   └── app/api/          # API-роуты: auth (NextAuth), register, forum
+├── lib/                 # утилиты, маршруты, бейджи, prisma, auth, images
+├── providers/           # ThemeProvider + AuthProvider (NextAuth)
 └── types/               # доменные типы
-prisma/schema.prisma     # опциональная схема БД для бэкенда
+prisma/schema.prisma     # схема БД форума (User, ForumThread, ForumPost)
+scripts/fetch-tmdb.mjs   # выгрузка серий и изображений из TMDB
 ```
 
 ## 🎨 Дизайн-система
