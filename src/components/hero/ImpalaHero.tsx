@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
@@ -36,16 +37,38 @@ export function ImpalaHero() {
         </div>
       </div>
 
-      {/* Свечение фар на горизонте */}
+      {/* Импала из сериала — кадр в кинематографичной рамке */}
       <motion.div
-        style={{ y: carY }}
-        className="absolute bottom-[28%] left-1/2 -translate-x-1/2"
+        style={{ y: carY, x: '-50%' }}
+        className="absolute bottom-[22%] left-1/2"
       >
-        <div className="relative">
-          <ImpalaSilhouette />
-          {/* Конусы света фар */}
-          <div className="absolute -bottom-2 left-1/2 h-40 w-72 -translate-x-1/2 rounded-[50%] bg-impala/20 blur-3xl" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.3 }}
+          className="relative"
+        >
+          {/* Свет фар/дороги под клипом */}
+          <div className="absolute -bottom-8 left-1/2 h-44 w-[130%] -translate-x-1/2 rounded-[50%] bg-impala/25 blur-3xl" />
+          <div className="relative w-[280px] overflow-hidden rounded-md border border-impala/40 shadow-glow-lg sm:w-[400px] md:w-[500px]">
+            <Image
+              src="/media/impala-drive.gif"
+              alt="Сэм и Дин в Импале на ночной дороге"
+              width={540}
+              height={256}
+              unoptimized
+              priority
+              className="h-auto w-full"
+            />
+            {/* Виньетка + лёгкая «плёнка» */}
+            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_70px_rgba(0,0,0,0.75)]" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/50 via-transparent to-transparent" />
+            <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:repeating-linear-gradient(0deg,rgba(0,0,0,0.5)_0px,rgba(0,0,0,0.5)_1px,transparent_1px,transparent_3px)]" />
+            <span className="absolute bottom-2 right-3 font-mono text-[9px] uppercase tracking-[0.3em] text-impala/70">
+              Impala · &apos;67
+            </span>
+          </div>
+        </motion.div>
       </motion.div>
 
       <ParticlesAsh count={24} />
@@ -106,42 +129,5 @@ export function ImpalaHero() {
         <ArrowDown className="h-5 w-5 animate-bounce" />
       </motion.div>
     </section>
-  );
-}
-
-/** Стилизованный силуэт классического маслкара с горящими фарами. */
-function ImpalaSilhouette() {
-  return (
-    <svg
-      viewBox="0 0 320 130"
-      className="h-auto w-[260px] sm:w-[340px] md:w-[420px]"
-      aria-label="Chevrolet Impala 1967"
-      role="img"
-    >
-      {/* Корпус */}
-      <path
-        d="M10 95 Q14 70 40 66 Q70 40 130 36 Q200 32 250 50 Q285 56 300 72 Q312 80 310 95 L300 95 A18 18 0 0 0 264 95 L120 95 A18 18 0 0 0 84 95 Z"
-        fill="#0d0d0d"
-        stroke="#2a2a2a"
-        strokeWidth="1.5"
-      />
-      {/* Крыша/окна */}
-      <path
-        d="M78 64 Q120 44 175 44 Q220 46 244 60 Z"
-        fill="#161616"
-        stroke="#262626"
-        strokeWidth="1"
-      />
-      {/* Фары */}
-      <circle cx="300" cy="78" r="7" fill="#ffe9a8" />
-      <circle cx="300" cy="78" r="14" fill="#d4af37" opacity="0.35" />
-      {/* Колёса */}
-      <circle cx="102" cy="95" r="18" fill="#080808" stroke="#333" strokeWidth="2" />
-      <circle cx="102" cy="95" r="7" fill="#1a1a1a" />
-      <circle cx="282" cy="95" r="18" fill="#080808" stroke="#333" strokeWidth="2" />
-      <circle cx="282" cy="95" r="7" fill="#1a1a1a" />
-      {/* Блик хрома */}
-      <path d="M120 84 L250 80" stroke="#d4af37" strokeWidth="1.5" opacity="0.5" />
-    </svg>
   );
 }

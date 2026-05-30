@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ImpalaHero } from '@/components/hero/ImpalaHero';
 import { DailyShowcase } from '@/components/home/DailyShowcase';
 import { EpisodeCard } from '@/components/episodes/EpisodeCard';
@@ -49,6 +50,33 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Кинокадр: Винчестеры и Импала */}
+      <section className="relative overflow-hidden">
+        <div className="relative h-[52vh] min-h-[360px] w-full">
+          <Image
+            src="/media/winchesters-road.jpg"
+            alt="Сэм и Дин у Импалы на закатной трассе"
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover object-center"
+          />
+          {/* Блендинг в тёмную страницу сверху и снизу */}
+          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-void to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-void to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-void/60 via-transparent to-transparent" />
+          <div className="container-page relative flex h-full flex-col justify-center">
+            <p className="section-eyebrow animate-fade-up">Дорога — наш дом</p>
+            <h2 className="mt-3 max-w-md font-display text-4xl uppercase leading-[0.95] tracking-wide text-bone drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-5xl">
+              Семейное дело длиной в 15 сезонов
+            </h2>
+            <Link href={routes.episodes} className="btn-ember mt-6 w-fit text-sm">
+              В дорогу
+            </Link>
+          </div>
         </div>
       </section>
 
