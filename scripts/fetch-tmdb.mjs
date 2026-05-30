@@ -86,13 +86,27 @@ async function main() {
   }
 
   // ── Актёры (фото для персонажей) ──
+  // Оставляем только тех, кто реально используется в энциклопедии,
+  // чтобы не раздувать бандл (иначе 1800+ записей попадут в клиент).
+  const WANTED = [
+    'Jensen Ackles', 'Jared Padalecki', 'Misha Collins', 'Mark Sheppard',
+    'Alexander Calvert', 'Rob Benedict', 'Samantha Smith', 'Jeffrey Dean Morgan',
+    'Jim Beaver', 'Richard Speight Jr.', 'Mark Pellegrino', 'Jake Abel',
+    'Emily Swallow', 'Fredric Lehne', 'Rachel Miner', 'Genevieve Padalecki',
+    'Lauren Cohan', 'Sterling K. Brown', 'Osric Chau', 'Alona Tal',
+    'Samantha Ferris', 'Chad Lindberg', 'Kim Rhodes', 'Felicia Day',
+    'Ruth Connell', 'Alaina Huffman', 'Curtis Armstrong',
+  ];
+  const normName = (s) => s.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '');
+  const wantedSet = new Set(WANTED.map(normName));
+
   let people = [];
   try {
     const credits = await tmdb(`/tv/${SHOW_ID}/aggregate_credits`, {
       language: 'en-US',
     });
     people = (credits.cast ?? [])
-      .filter((c) => c.profile_path)
+      .filter((c) => c.profile_path && wantedSet.has(normName(c.name)))
       .map((c) => ({
         name: c.name,
         character: c.roles?.[0]?.character ?? '',
